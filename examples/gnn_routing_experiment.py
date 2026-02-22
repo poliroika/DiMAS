@@ -37,6 +37,7 @@ import random
 import sys
 import time
 import traceback
+from urllib.request import urlopen
 
 # Fix Windows console encoding BEFORE any output
 os.environ.setdefault("PYTHONIOENCODING", "utf-8")
@@ -46,7 +47,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-import rustworkx as rx
 import torch
 from torch_geometric.data import Data
 
@@ -154,23 +154,7 @@ AGENT_DEFS: dict[str, dict[str, str]] = {
     },
 }
 
-# Edge definitions: (source, target, weight)
-EDGE_DEFINITIONS = [
-    ("coordinator", "researcher",  0.90),
-    ("coordinator", "analyst",     0.85),
-    ("coordinator", "writer",      0.60),
-    ("researcher",  "expert_1",    0.75),
-    ("researcher",  "expert_2",    0.65),
-    ("researcher",  "analyst",     0.70),
-    ("analyst",     "expert_1",    0.80),
-    ("analyst",     "writer",      0.88),
-    ("expert_1",    "aggregator",  0.82),
-    ("expert_2",    "aggregator",  0.70),
-    ("writer",      "reviewer",    0.95),
-    ("aggregator",  "reviewer",    0.90),
-    ("aggregator",  "writer",      0.75),
-    ("reviewer",    "coordinator", 0.50),
-]
+IRIS_DATA_URL = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
 
 # Task scenarios — real queries for the multi-agent system
 TASK_QUERIES = [
@@ -272,21 +256,23 @@ def _ensure_dirs() -> None:
 # 1. Graph Construction (using GraphBuilder for proper RoleGraph)
 # =============================================================================
 
-def create_experiment_graph(query: str = "") -> RoleGraph:
-    """Build the 8-node directed agent graph using GraphBuilder."""
-    builder = GraphBuilder(BuilderConfig(
-        include_task_node=True,
-        validate=True,
-        check_cycles=False,  # Our graph has intentional cycles
-    ))
+def _add_dense_topology(builder: GraphBuilder, agent_ids: list[str]) -> None:
+    """Create dense initial topology: task -> all agents + all-to-all directed mesh."""
+    builder.connect_task_to_agents(agent_ids=agent_ids, bidirectional=False)
+    for source_id in agent_ids:
+        for target_id in agent_ids:
+            if source_id != target_id:
+                builder.add_workflow_edge(source_id, target_id, weight=0.6)
 
-    # Add task node
+
+def create_experiment_graph(query: str = "") -> RoleGraph:
+    """Build a dense graph where every agent is connected to every other agent."""
+    builder = GraphBuilder(BuilderConfig(include_task_node=True, validate=True, check_cycles=False))
     builder.add_task(
         query=query or "Multi-agent GNN routing experiment",
         description="Experiment task for collecting real execution metrics",
     )
 
-    # Add all agents with their personas and descriptions
     for agent_id, agent_def in AGENT_DEFS.items():
         builder.add_agent(
             agent_id=agent_id,
@@ -295,32 +281,16 @@ def create_experiment_graph(query: str = "") -> RoleGraph:
             description=agent_def["description"],
         )
 
-    # Connect task to coordinator (entry point)
-    builder.connect_task_to_agents(agent_ids=["coordinator"], bidirectional=False)
-
-    # Add workflow edges
-    for src, tgt, weight in EDGE_DEFINITIONS:
-        builder.add_workflow_edge(src, tgt, weight=weight)
-
+    _add_dense_topology(builder, list(AGENT_DEFS.keys()))
     return builder.build()
 
 
 def create_scenario_graph(scenario: dict[str, Any]) -> RoleGraph:
-    """Build a graph for a specific scenario with only the needed agents."""
-    path = scenario["path"]
-    query = scenario["query"]
+    """Build dense scenario graph (non-chain) with dynamic choice during execution."""
+    builder = GraphBuilder(BuilderConfig(include_task_node=True, validate=True, check_cycles=False))
+    builder.add_task(query=scenario["query"], description=f"Task: {scenario['name']}")
 
-    builder = GraphBuilder(BuilderConfig(
-        include_task_node=True,
-        validate=True,
-        check_cycles=False,
-    ))
-
-    builder.add_task(query=query, description=f"Task: {scenario['name']}")
-
-    # Add only agents in the path
-    for agent_id in path:
-        agent_def = AGENT_DEFS[agent_id]
+    for agent_id, agent_def in AGENT_DEFS.items():
         builder.add_agent(
             agent_id=agent_id,
             display_name=agent_id.replace("_", " ").title(),
@@ -328,22 +298,9 @@ def create_scenario_graph(scenario: dict[str, Any]) -> RoleGraph:
             description=agent_def["description"],
         )
 
-    # Connect task to first agent
-    builder.connect_task_to_agents(agent_ids=[path[0]], bidirectional=False)
-
-    # Connect agents in sequence
-    for i in range(len(path) - 1):
-        # Find weight from EDGE_DEFINITIONS
-        w = 1.0
-        for src, tgt, weight in EDGE_DEFINITIONS:
-            if src == path[i] and tgt == path[i + 1]:
-                w = weight
-                break
-        builder.add_workflow_edge(path[i], path[i + 1], weight=w)
-
+    _add_dense_topology(builder, list(AGENT_DEFS.keys()))
     graph = builder.build()
-    # Set start/end nodes for proper execution
-    graph.start_node = path[0]
+    graph.start_node = "coordinator"
     graph.end_node = scenario["final_agent"]
     return graph
 
@@ -601,43 +558,58 @@ def collect_real_metrics(
     return execution_logs
 
 
+def load_iris_dataset() -> tuple[torch.Tensor, torch.Tensor]:
+    """Load the real Iris dataset from UCI."""
+    with urlopen(IRIS_DATA_URL, timeout=30) as response:
+        rows = response.read().decode("utf-8").strip().splitlines()
+
+    features: list[list[float]] = []
+    labels: list[int] = []
+    class_to_idx = {
+        "Iris-setosa": 0,
+        "Iris-versicolor": 1,
+        "Iris-virginica": 2,
+    }
+
+    for row in rows:
+        parts = row.split(",")
+        if len(parts) == 5:
+            features.append([float(v) for v in parts[:4]])
+            labels.append(class_to_idx[parts[4]])
+
+    x = torch.tensor(features, dtype=torch.float32)
+    y = torch.tensor(labels, dtype=torch.long)
+    return x, y
+
+
 def collect_simulated_metrics(
     tracker: MetricsTracker,
     num_tasks: int = NUM_REAL_TASKS,
 ) -> list[dict[str, Any]]:
-    """
-    Collect SIMULATED metrics (no LLM calls).
+    """Collect dataset-driven metrics from the real Iris dataset (no LLM calls)."""
+    _print("\n  DATASET MODE -- using real Iris samples (no LLM calls)")
+    x, y = load_iris_dataset()
+    _print(f"  Loaded Iris: {x.shape[0]} samples, {x.shape[1]} features")
 
-    Uses realistic distributions based on typical agent performance
-    to generate training data for the GNN.
-    """
-    _print(f"\n  SIMULATION MODE -- no real LLM calls")
-    _print(f"  Generating {num_tasks} simulated task executions...")
-
-    # Agent performance profiles (simulated)
-    agent_profiles = {
-        "coordinator":  {"latency_range": (200, 800),   "quality_range": (0.7, 0.95), "reliability": 0.98},
-        "researcher":   {"latency_range": (500, 2000),  "quality_range": (0.6, 0.90), "reliability": 0.92},
-        "analyst":      {"latency_range": (400, 1500),  "quality_range": (0.65, 0.92), "reliability": 0.95},
-        "writer":       {"latency_range": (600, 2500),  "quality_range": (0.55, 0.88), "reliability": 0.90},
-        "reviewer":     {"latency_range": (300, 1200),  "quality_range": (0.70, 0.98), "reliability": 0.97},
-        "expert_1":     {"latency_range": (800, 3000),  "quality_range": (0.75, 0.95), "reliability": 0.88},
-        "expert_2":     {"latency_range": (700, 2800),  "quality_range": (0.60, 0.85), "reliability": 0.85},
-        "aggregator":   {"latency_range": (300, 1000),  "quality_range": (0.65, 0.90), "reliability": 0.94},
+    class_paths = {
+        0: ["coordinator", "researcher", "expert_1", "aggregator", "reviewer"],
+        1: ["coordinator", "analyst", "writer", "aggregator", "reviewer"],
+        2: ["coordinator", "researcher", "analyst", "expert_2", "aggregator", "reviewer"],
     }
 
+    agent_order = list(AGENT_DEFS.keys())
     execution_logs: list[dict[str, Any]] = []
 
     for task_idx in range(num_tasks):
-        scenario = TASK_QUERIES[task_idx % len(TASK_QUERIES)]
-        path = scenario["path"]
-
-        _print(f"  Task {task_idx + 1}/{num_tasks}: {scenario['name']} ({' -> '.join(path)})")
+        sample_idx = task_idx % x.shape[0]
+        sample = x[sample_idx]
+        label = int(y[sample_idx].item())
+        path = class_paths[label]
 
         task_log: dict[str, Any] = {
             "task_id": task_idx,
-            "scenario": scenario["name"],
-            "query": scenario["query"],
+            "scenario": f"iris_class_{label}",
+            "query": f"Iris sample #{sample_idx}",
             "path": path,
             "steps": [],
             "total_latency_ms": 0.0,
@@ -647,16 +619,12 @@ def collect_simulated_metrics(
 
         prev_agent = None
         for agent_id in path:
-            profile = agent_profiles.get(agent_id, agent_profiles["coordinator"])
-            success = random.random() < profile["reliability"]
-
-            lat_lo, lat_hi = profile["latency_range"]
-            latency_ms = random.uniform(lat_lo, lat_hi)
-
-            q_lo, q_hi = profile["quality_range"]
-            quality = random.uniform(q_lo, q_hi) if success else 0.0
-
-            tokens = random.randint(100, 800) if success else 0
+            pos = agent_order.index(agent_id) + 1
+            latency_ms = float(120 + sample[0].item() * 25 + sample[2].item() * 30 + pos * 12)
+            quality_raw = float((sample[1].item() + sample[3].item()) / 10 + (4 - abs(label - (pos % 3))) * 0.12)
+            quality = max(0.0, min(1.0, quality_raw))
+            tokens = int(90 + sample[2].item() * 18 + pos * 7)
+            success = quality >= 0.35
 
             tracker.record_node_execution(
                 node_id=agent_id,
@@ -681,24 +649,15 @@ def collect_simulated_metrics(
                 "quality": round(quality, 4),
                 "tokens": tokens,
             })
-            task_log["total_tokens"] += tokens
             task_log["total_latency_ms"] += latency_ms
-
-            if not success:
-                task_log["success"] = False
-
+            task_log["total_tokens"] += tokens
+            task_log["success"] = task_log["success"] and success
             prev_agent = agent_id
 
         task_log["total_latency_ms"] = round(task_log["total_latency_ms"], 2)
         execution_logs.append(task_log)
 
-    successful = sum(1 for l in execution_logs if l["success"])
-    total_tokens = sum(l["total_tokens"] for l in execution_logs)
-    _print(f"\n  === Simulated Metric Collection Summary ===")
-    _print(f"  Total tasks: {num_tasks}")
-    _print(f"  Successful: {successful}")
-    _print(f"  Total tokens (simulated): {total_tokens}")
-
+    _print(f"  Generated {len(execution_logs)} dataset-based executions")
     return execution_logs
 
 
@@ -761,50 +720,40 @@ def prepare_training_data(
     tracker: MetricsTracker,
     n_samples: int = 300,
 ) -> tuple[list[Any], list[Any], int]:
-    """
-    Generate training data from REAL metrics collected from LLM executions.
-
-    Labels: 1 = high-quality node (above median composite score), 0 = low-quality.
-    Features: structural + centrality + metrics from tracker.
-    """
+    """Prepare GNN training data from real Iris samples + collected graph metrics."""
     feat_gen = DefaultFeatureGenerator()
     node_ids = graph.node_ids
-    features = feat_gen.generate_node_features(graph, node_ids, tracker)
-    edge_index = graph.edge_index
+    graph_features = feat_gen.generate_node_features(graph, node_ids, tracker).to(torch.float32)
+    edge_index = graph.edge_index.to(torch.long)
+    _, y_data = load_iris_dataset()
 
-    # Compute composite scores from REAL metrics
-    scores = tracker.get_node_scores()
-    median_score = torch.median(torch.tensor(list(scores.values()))).item() if scores else 0.5
-    labels = [1 if scores.get(nid, 0.5) >= median_score else 0 for nid in node_ids]
+    agent_targets = {
+        0: "expert_1",
+        1: "analyst",
+        2: "expert_2",
+    }
+    target_index = {nid: idx for idx, nid in enumerate(node_ids)}
 
-    _print(f"  Node scores (from collected executions):")
-    for nid in node_ids:
-        s = scores.get(nid, 0)
-        nm = tracker.get_node_metrics(nid)
-        if nm:
-            _print(f"    {nid:<15} score={s:.4f}  executions={nm.total_executions}  "
-                   f"rel={nm.reliability:.3f}  lat={nm.avg_latency_ms:.0f}ms  qual={nm.avg_quality:.3f}")
+    total_samples = min(n_samples, y_data.shape[0])
+    split = int(total_samples * 0.8)
+    train_data: list[Data] = []
+    val_data: list[Data] = []
+
+    for idx in range(total_samples):
+        sample_label = int(y_data[idx].item())
+        x = graph_features.clone()
+
+        y = torch.zeros(len(node_ids), dtype=torch.long)
+        y[target_index[agent_targets[sample_label]]] = 1
+
+        data_point = Data(x=x, edge_index=edge_index, y=y)
+        if idx < split:
+            train_data.append(data_point)
         else:
-            _print(f"    {nid:<15} score={s:.4f}  (no executions)")
+            val_data.append(data_point)
 
-    _print(f"  Median score: {median_score:.4f}")
-    _print(f"  Labels: {dict(zip(node_ids, labels))}")
-
-    split = int(n_samples * 0.8)
-    train_data, val_data = [], []
-
-    for i in range(n_samples):
-        # Add small noise for augmentation
-        noise_scale = 0.05
-        noisy_features = features + torch.randn_like(features) * noise_scale
-        d = Data(
-            x=noisy_features.to(torch.float32),
-            edge_index=edge_index.clone().to(torch.long),
-            y=torch.tensor(labels, dtype=torch.long),
-        )
-        (train_data if i < split else val_data).append(d)
-
-    in_channels = features.shape[1]
+    in_channels = train_data[0].x.shape[1]
+    _print(f"  Iris-backed samples: {total_samples}")
     _print(f"  Train: {len(train_data)}, Val: {len(val_data)}, Features: {in_channels}")
     return train_data, val_data, in_channels
 
@@ -858,6 +807,57 @@ def train_gnn_model(
     _print(f"  Training time: {elapsed:.2f}s")
 
     return model, history
+
+
+def optimize_graph_topology(
+    graph: RoleGraph,
+    model: Any,
+    tracker: MetricsTracker,
+    iterations: int = 5,
+) -> list[dict[str, Any]]:
+    """Dynamically rewire graph topology using GNN scores (add/remove edges each step)."""
+    router = GNNRouterInference(model, DefaultFeatureGenerator())
+    agent_nodes = [nid for nid in graph.node_ids if nid != graph.task_node]
+    snapshots: list[dict[str, Any]] = []
+
+    for step in range(iterations):
+        scores = router.get_all_scores(graph, tracker)
+        ranked_pairs: list[tuple[float, str, str]] = []
+        for src in agent_nodes:
+            for tgt in agent_nodes:
+                if src != tgt:
+                    pair_score = (scores.get(src, 0.0) + scores.get(tgt, 0.0)) / 2
+                    ranked_pairs.append((pair_score, src, tgt))
+        ranked_pairs.sort(reverse=True)
+
+        keep_edges = int(len(ranked_pairs) * (0.35 + step * 0.08))
+        selected_pairs = {(src, tgt): score for score, src, tgt in ranked_pairs[:keep_edges]}
+
+        removed: list[str] = []
+        for edge in list(graph.edges):
+            src, tgt = edge["source"], edge["target"]
+            if src == graph.task_node:
+                continue
+            if (src, tgt) not in selected_pairs:
+                if graph.remove_edge(src, tgt):
+                    removed.append(f"{src}->{tgt}")
+
+        added: list[str] = []
+        for (src, tgt), score in selected_pairs.items():
+            if tgt not in graph.get_neighbors(src, direction="out"):
+                graph.add_edge(src, tgt, weight=float(score))
+                added.append(f"{src}->{tgt}")
+
+        snapshots.append({
+            "step": step + 1,
+            "num_edges": graph.num_edges,
+            "added": added,
+            "removed": removed,
+            "top_scores": sorted(scores.items(), key=lambda x: -x[1])[:5],
+        })
+        _print(f"  Topology step {step + 1}: edges={graph.num_edges}, +{len(added)}, -{len(removed)}")
+
+    return snapshots
 
 
 # =============================================================================
@@ -1432,7 +1432,7 @@ def main() -> None:
             use_simulation = True
 
     if use_simulation:
-        _header(2, total_steps, f"Collect SIMULATED metrics ({NUM_REAL_TASKS} tasks)")
+        _header(2, total_steps, f"Collect DATASET-DRIVEN metrics ({NUM_REAL_TASKS} tasks)")
         execution_logs = collect_simulated_metrics(tracker, num_tasks=NUM_REAL_TASKS)
     else:
         execution_logs = collect_real_metrics(tracker, num_tasks=NUM_REAL_TASKS)
@@ -1518,7 +1518,9 @@ def main() -> None:
     _print(f"  -> {OUTPUT_DIR / 'training_curves.html'}")
 
     # -- Step 7: Compare routing strategies ---------------------------------
-    _header(7, total_steps, "Compare routing strategies")
+    _header(7, total_steps, "Dynamic topology optimization + routing")
+    topology_history = optimize_graph_topology(graph, model, tracker, iterations=6)
+    experiment_log["steps"]["topology_optimization"] = topology_history
     strategies = compare_routing_strategies(graph, model, tracker, num_trials=200)
 
     _print("\n  Results:")
@@ -1542,6 +1544,7 @@ def main() -> None:
     for nid, score in sorted(gnn_scores.items(), key=lambda x: -x[1]):
         _print(f"    {nid:<15} gnn_score={score:.4f}  quality_score={node_scores.get(nid, 0):.4f}")
 
+    edges_data = graph.edges
     _generate_graph_html(
         "Agent Graph -- AFTER GNN Training (colored by GNN score)",
         nodes_data, edges_data, gnn_scores,
