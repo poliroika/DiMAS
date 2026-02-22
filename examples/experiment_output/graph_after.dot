@@ -1,0 +1,31 @@
+digraph GNNRoutingExperiment {
+    rankdir=TB;
+    node [fontname="Helvetica", fontsize=12];
+    edge [fontname="Helvetica", fontsize=10];
+
+    task [label="Task", shape=diamond, style=filled, fillcolor="#fff3e0", color="#f57c00"];
+    coordinator [label="Coordinator", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+    researcher [label="Researcher", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+    analyst [label="Analyst", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+    writer [label="Writer", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+    reviewer [label="Reviewer", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+    expert_1 [label="Expert 1", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+    expert_2 [label="Expert 2", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+    aggregator [label="Aggregator", shape=box, style=filled, fillcolor="#e3f2fd", color="#1976d2"];
+
+    task -> coordinator [style=dashed, color="#f57c00"];
+    coordinator -> researcher [color="#1976d2", label="0.90"];
+    coordinator -> writer [color="#1976d2", label="0.60"];
+    coordinator -> analyst [color="#1976d2", label="0.85"];
+    researcher -> expert_2 [color="#1976d2", label="0.65"];
+    researcher -> expert_1 [color="#1976d2", label="0.75"];
+    researcher -> analyst [color="#1976d2", label="0.70"];
+    analyst -> expert_1 [color="#1976d2", label="0.80"];
+    analyst -> writer [color="#1976d2", label="0.88"];
+    expert_1 -> aggregator [color="#1976d2", label="0.82"];
+    expert_2 -> aggregator [color="#1976d2", label="0.70"];
+    writer -> reviewer [color="#1976d2", label="0.95"];
+    aggregator -> reviewer [color="#1976d2", label="0.90"];
+    aggregator -> writer [color="#1976d2", label="0.75"];
+    reviewer -> coordinator [color="#1976d2", label="0.50"];
+}

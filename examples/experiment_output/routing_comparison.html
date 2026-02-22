@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Routing Strategy Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee;
+               display: flex; flex-direction: column; align-items: center; padding: 30px; }
+        h1 { color: #e94560; }
+        .info { color: #aaa; font-size: 14px; margin-bottom: 20px; }
+        canvas { background: #16213e; border-radius: 10px; padding: 10px; max-width: 900px; }
+        table { margin-top: 30px; border-collapse: collapse; background: #16213e; border-radius: 8px; overflow: hidden; }
+        th { background: #0f3460; padding: 10px 20px; text-align: left; }
+        td { padding: 8px 20px; border-top: 1px solid #333; }
+        .highlight { color: #e94560; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Routing Strategy Comparison</h1>
+    <p class="info">Based on REAL metrics from 20 LLM executions | 1400 routing decisions | LLM: zai-org/GLM-4.7</p>
+    <canvas id="chart" width="900" height="400"></canvas>
+    <table>
+        <tr><th>Strategy</th><th>Avg Quality</th><th>Avg Confidence</th><th>Trials</th></tr>
+        <tr><td>GNN_ARGMAX</td><td class="highlight">0.6701</td><td>0.7900</td><td>200</td></tr><tr><td>GNN_TOP_K</td><td class="highlight">0.6182</td><td>0.3675</td><td>200</td></tr><tr><td>GNN_THRESHOLD</td><td class="highlight">0.5279</td><td>0.7799</td><td>200</td></tr><tr><td>GNN_SOFTMAX</td><td class="highlight">0.6578</td><td>0.7900</td><td>200</td></tr><tr><td>RANDOM</td><td class="highlight">0.6261</td><td>0.0000</td><td>200</td></tr><tr><td>TOPOLOGICAL</td><td class="highlight">0.6401</td><td>0.0000</td><td>200</td></tr><tr><td>METRICS_BEST</td><td class="highlight">0.6726</td><td>0.0000</td><td>200</td></tr>
+    </table>
+    <script>
+        new Chart(document.getElementById('chart'), {
+            type: 'bar',
+            data: {
+                labels: ["GNN_ARGMAX", "GNN_TOP_K", "GNN_THRESHOLD", "GNN_SOFTMAX", "RANDOM", "TOPOLOGICAL", "METRICS_BEST"],
+                datasets: [{
+                    label: 'Avg Chosen Node Quality',
+                    data: [0.6701, 0.6182, 0.5279, 0.6578, 0.6261, 0.6401, 0.6726],
+                    backgroundColor: ['rgba(233,69,96,0.8)','rgba(233,69,96,0.8)','rgba(233,69,96,0.8)','rgba(233,69,96,0.8)','rgba(100,100,100,0.6)','rgba(100,100,100,0.6)','rgba(15,52,96,0.8)'],
+                    borderColor: ['rgba(233,69,96,1)','rgba(233,69,96,1)','rgba(233,69,96,1)','rgba(233,69,96,1)','rgba(100,100,100,1)','rgba(100,100,100,1)','rgba(15,52,96,1)'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#eee' } } },
+                scales: {
+                    x: { ticks: { color: '#ccc' }, grid: { color: '#333' } },
+                    y: { title: { display: true, text: 'Quality Score', color: '#aaa' },
+                          ticks: { color: '#888' }, grid: { color: '#333' },
+                          min: 0, max: 1 }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

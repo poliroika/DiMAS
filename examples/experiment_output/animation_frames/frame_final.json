@@ -1,0 +1,24 @@
+{
+  "epoch": 80,
+  "gnn_scores": {
+    "__task__": 0.0,
+    "coordinator": 1.0,
+    "researcher": 1.0,
+    "analyst": 0.9999,
+    "writer": 0.0001,
+    "reviewer": 1.0,
+    "expert_1": 0.0,
+    "expert_2": 0.0,
+    "aggregator": 1.0
+  },
+  "node_quality_scores": {
+    "coordinator": 0.7926,
+    "researcher": 0.6534,
+    "expert_1": 0.4803,
+    "aggregator": 0.6755,
+    "reviewer": 0.7206,
+    "analyst": 0.6562,
+    "writer": 0.6511,
+    "expert_2": 0.6002
+  }
+}

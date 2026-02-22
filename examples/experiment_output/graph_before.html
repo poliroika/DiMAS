@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Graph -- BEFORE GNN Training</title>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; }
+        #header { padding: 15px 25px; background: #16213e; border-bottom: 2px solid #0f3460; }
+        #header h1 { margin: 0; font-size: 22px; color: #e94560; }
+        #header p { margin: 5px 0 0; font-size: 13px; color: #aaa; }
+        #graph { width: 100%; height: calc(100vh - 80px); }
+        #legend { position: absolute; top: 90px; right: 20px; background: rgba(22,33,62,0.9);
+                   padding: 12px; border-radius: 8px; font-size: 12px; border: 1px solid #0f3460; }
+        .legend-item { display: flex; align-items: center; margin: 4px 0; }
+        .legend-color { width: 14px; height: 14px; border-radius: 3px; margin-right: 8px; }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>Agent Graph -- BEFORE GNN Training</h1>
+        <p>MECE Framework -- GNN Routing Experiment | LLM: zai-org/GLM-4.7 | Nodes: 9 | Edges: 15</p>
+    </div>
+    <div id="graph"></div>
+    <div id="legend">
+        <b>Legend</b>
+        <div class="legend-item"><div class="legend-color" style="background:rgb(0,255,80)"></div> High score node</div>
+        <div class="legend-item"><div class="legend-color" style="background:rgb(255,0,80)"></div> Low score node</div>
+        <div class="legend-item"><div class="legend-color" style="background:rgb(0,255,50)"></div> Reliable edge</div>
+        <div class="legend-item"><div class="legend-color" style="background:rgb(255,0,50)"></div> Unreliable edge</div>
+        <div class="legend-item" style="margin-top:8px;color:#aaa"><i>Hover nodes/edges for details</i></div>
+    </div>
+    <script>
+        var nodes = new vis.DataSet([{"id": "__task__", "label": "__task__\\nscore=0.500", "title": "Score: 0.500", "color": {"background": "rgb(127,127,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "coordinator", "label": "coordinator\\nscore=0.793", "title": "Score: 0.793\\nExecutions: 20\\nReliability: 1.000\\nAvg Latency: 518ms\\nAvg Quality: 0.850\\nAvg Cost: 369 tokens", "color": {"background": "rgb(52,202,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "researcher", "label": "researcher\\nscore=0.653", "title": "Score: 0.653\\nExecutions: 9\\nReliability: 1.000\\nAvg Latency: 1373ms\\nAvg Quality: 0.744\\nAvg Cost: 476 tokens", "color": {"background": "rgb(88,166,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "analyst", "label": "analyst\\nscore=0.656", "title": "Score: 0.656\\nExecutions: 11\\nReliability: 0.909\\nAvg Latency: 802ms\\nAvg Quality: 0.735\\nAvg Cost: 470 tokens", "color": {"background": "rgb(87,167,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "writer", "label": "writer\\nscore=0.651", "title": "Score: 0.651\\nExecutions: 9\\nReliability: 1.000\\nAvg Latency: 1975ms\\nAvg Quality: 0.705\\nAvg Cost: 449 tokens", "color": {"background": "rgb(88,166,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "reviewer", "label": "reviewer\\nscore=0.721", "title": "Score: 0.721\\nExecutions: 20\\nReliability: 1.000\\nAvg Latency: 747ms\\nAvg Quality: 0.831\\nAvg Cost: 482 tokens", "color": {"background": "rgb(71,183,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "expert_1", "label": "expert_1\\nscore=0.480", "title": "Score: 0.480\\nExecutions: 14\\nReliability: 0.571\\nAvg Latency: 1937ms\\nAvg Quality: 0.499\\nAvg Cost: 241 tokens", "color": {"background": "rgb(132,122,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "expert_2", "label": "expert_2\\nscore=0.600", "title": "Score: 0.600\\nExecutions: 3\\nReliability: 1.000\\nAvg Latency: 1736ms\\nAvg Quality: 0.711\\nAvg Cost: 710 tokens", "color": {"background": "rgb(101,153,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}, {"id": "aggregator", "label": "aggregator\\nscore=0.675", "title": "Score: 0.675\\nExecutions: 14\\nReliability: 0.857\\nAvg Latency: 599ms\\nAvg Quality: 0.682\\nAvg Cost: 420 tokens", "color": {"background": "rgb(82,172,80)", "border": "#333"}, "font": {"color": "#fff", "size": 14}, "shape": "box", "borderWidth": 2}]);
+        var edges = new vis.DataSet([{"from": "__task__", "to": "coordinator", "label": "w=1.00", "title": "", "width": 5, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "coordinator", "to": "researcher", "label": "w=0.90\\nrel=1.00", "title": "Transitions: 9\\nReliability: 1.000\\nAvg Latency: 1373ms", "width": 4, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "coordinator", "to": "writer", "label": "w=0.60\\nrel=1.00", "title": "Transitions: 3\\nReliability: 1.000\\nAvg Latency: 1877ms", "width": 3, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "coordinator", "to": "analyst", "label": "w=0.85\\nrel=0.88", "title": "Transitions: 8\\nReliability: 0.875\\nAvg Latency: 772ms", "width": 4, "color": {"color": "rgb(31,223,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "researcher", "to": "expert_2", "label": "w=0.65", "title": "", "width": 3, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "researcher", "to": "expert_1", "label": "w=0.75\\nrel=0.50", "title": "Transitions: 6\\nReliability: 0.500\\nAvg Latency: 2156ms", "width": 3, "color": {"color": "rgb(127,127,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "researcher", "to": "analyst", "label": "w=0.70\\nrel=1.00", "title": "Transitions: 3\\nReliability: 1.000\\nAvg Latency: 882ms", "width": 3, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "analyst", "to": "expert_1", "label": "w=0.80\\nrel=0.62", "title": "Transitions: 8\\nReliability: 0.625\\nAvg Latency: 1773ms", "width": 4, "color": {"color": "rgb(95,159,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "analyst", "to": "writer", "label": "w=0.88\\nrel=1.00", "title": "Transitions: 3\\nReliability: 1.000\\nAvg Latency: 1891ms", "width": 4, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "expert_1", "to": "aggregator", "label": "w=0.82\\nrel=0.82", "title": "Transitions: 11\\nReliability: 0.818\\nAvg Latency: 626ms", "width": 4, "color": {"color": "rgb(46,208,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "expert_2", "to": "aggregator", "label": "w=0.70\\nrel=1.00", "title": "Transitions: 3\\nReliability: 1.000\\nAvg Latency: 499ms", "width": 3, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "writer", "to": "reviewer", "label": "w=0.95\\nrel=1.00", "title": "Transitions: 9\\nReliability: 1.000\\nAvg Latency: 787ms", "width": 4, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "aggregator", "to": "reviewer", "label": "w=0.90\\nrel=1.00", "title": "Transitions: 11\\nReliability: 1.000\\nAvg Latency: 714ms", "width": 4, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "aggregator", "to": "writer", "label": "w=0.75\\nrel=1.00", "title": "Transitions: 3\\nReliability: 1.000\\nAvg Latency: 2158ms", "width": 3, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}, {"from": "reviewer", "to": "coordinator", "label": "w=0.50", "title": "", "width": 2, "color": {"color": "rgb(0,255,50)", "highlight": "#ff0"}, "arrows": "to", "font": {"size": 10, "align": "middle"}}]);
+        var container = document.getElementById('graph');
+        var data = { nodes: nodes, edges: edges };
+        var options = {
+            layout: { hierarchical: { direction: 'LR', sortMethod: 'directed', levelSeparation: 200 } },
+            physics: { enabled: false },
+            interaction: { hover: true, tooltipDelay: 100 },
+            edges: { smooth: { type: 'cubicBezier' } }
+        };
+        new vis.Network(container, data, options);
+    </script>
+</body>
+</html>

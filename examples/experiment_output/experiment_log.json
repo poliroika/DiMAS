@@ -1,0 +1,3097 @@
+{
+  "experiment": "GNN Routing Benchmark (REAL LLM)",
+  "framework": "MECE (RustworkX Agent Framework)",
+  "llm_model": "zai-org/GLM-4.7",
+  "llm_endpoint": "https://study-instantly-grande-rights.trycloudflare.com/v1",
+  "mode": "REAL LLM",
+  "timestamp": "2026-02-21T16:41:27.619964+00:00",
+  "steps": {
+    "metrics_collection": {
+      "num_tasks": 20,
+      "mode": "simulated",
+      "llm_model": "zai-org/GLM-4.7",
+      "node_scores": {
+        "coordinator": 0.7926,
+        "researcher": 0.6534,
+        "expert_1": 0.4803,
+        "aggregator": 0.6755,
+        "reviewer": 0.7206,
+        "analyst": 0.6562,
+        "writer": 0.6511,
+        "expert_2": 0.6002
+      },
+      "edge_weights_before": {
+        "static": {
+          "__task__->coordinator": {
+            "weight": 1.0
+          },
+          "coordinator->researcher": {
+            "weight": 0.9
+          },
+          "coordinator->analyst": {
+            "weight": 0.85
+          },
+          "coordinator->writer": {
+            "weight": 0.6
+          },
+          "researcher->expert_1": {
+            "weight": 0.75
+          },
+          "researcher->expert_2": {
+            "weight": 0.65
+          },
+          "researcher->analyst": {
+            "weight": 0.7
+          },
+          "analyst->expert_1": {
+            "weight": 0.8
+          },
+          "analyst->writer": {
+            "weight": 0.88
+          },
+          "expert_1->aggregator": {
+            "weight": 0.82
+          },
+          "expert_2->aggregator": {
+            "weight": 0.7
+          },
+          "writer->reviewer": {
+            "weight": 0.95
+          },
+          "aggregator->reviewer": {
+            "weight": 0.9
+          },
+          "aggregator->writer": {
+            "weight": 0.75
+          },
+          "reviewer->coordinator": {
+            "weight": 0.5
+          }
+        },
+        "dynamic": {
+          "coordinator->researcher": {
+            "effective_weight": 4.3203,
+            "reliability": 1.0,
+            "avg_latency_ms": 1373.43,
+            "total_transitions": 9
+          },
+          "researcher->expert_1": {
+            "effective_weight": 6.9182,
+            "reliability": 0.5,
+            "avg_latency_ms": 2156.07,
+            "total_transitions": 6
+          },
+          "expert_1->aggregator": {
+            "effective_weight": 2.1692,
+            "reliability": 0.8182,
+            "avg_latency_ms": 626.1,
+            "total_transitions": 11
+          },
+          "aggregator->reviewer": {
+            "effective_weight": 2.3406,
+            "reliability": 1.0,
+            "avg_latency_ms": 713.52,
+            "total_transitions": 11
+          },
+          "coordinator->analyst": {
+            "effective_weight": 2.5793,
+            "reliability": 0.875,
+            "avg_latency_ms": 772.25,
+            "total_transitions": 8
+          },
+          "analyst->expert_1": {
+            "effective_weight": 5.7066,
+            "reliability": 0.625,
+            "avg_latency_ms": 1773.03,
+            "total_transitions": 8
+          },
+          "aggregator->writer": {
+            "effective_weight": 6.674,
+            "reliability": 1.0,
+            "avg_latency_ms": 2158.02,
+            "total_transitions": 3
+          },
+          "writer->reviewer": {
+            "effective_weight": 2.5611,
+            "reliability": 1.0,
+            "avg_latency_ms": 787.05,
+            "total_transitions": 9
+          },
+          "coordinator->writer": {
+            "effective_weight": 5.8299,
+            "reliability": 1.0,
+            "avg_latency_ms": 1876.64,
+            "total_transitions": 3
+          },
+          "expert_1->expert_2": {
+            "effective_weight": 5.409,
+            "reliability": 1.0,
+            "avg_latency_ms": 1736.34,
+            "total_transitions": 3
+          },
+          "expert_2->aggregator": {
+            "effective_weight": 1.6983,
+            "reliability": 1.0,
+            "avg_latency_ms": 499.45,
+            "total_transitions": 3
+          },
+          "researcher->analyst": {
+            "effective_weight": 2.8461,
+            "reliability": 1.0,
+            "avg_latency_ms": 882.03,
+            "total_transitions": 3
+          },
+          "analyst->writer": {
+            "effective_weight": 5.8733,
+            "reliability": 1.0,
+            "avg_latency_ms": 1891.11,
+            "total_transitions": 3
+          }
+        }
+      },
+      "execution_summary": {
+        "total_tasks": 20,
+        "successful": 13,
+        "failed": 7,
+        "avg_latency_ms": 5248.12,
+        "total_tokens": 41914
+      },
+      "execution_logs": [
+        {
+          "task_id": 0,
+          "scenario": "research_report",
+          "query": "Analyze the current state of Graph Neural Networks in multi-agent systems. What are the key advantages and limitations?",
+          "path": [
+            "coordinator",
+            "researcher",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 721.05,
+              "success": true,
+              "quality": 0.8942,
+              "tokens": 517
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 1393.03,
+              "success": true,
+              "quality": 0.8053,
+              "tokens": 159
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 2363.8,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 632.37,
+              "success": true,
+              "quality": 0.8343,
+              "tokens": 799
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 1009.62,
+              "success": true,
+              "quality": 0.7625,
+              "tokens": 713
+            }
+          ],
+          "total_latency_ms": 6119.87,
+          "total_tokens": 2188,
+          "success": false
+        },
+        {
+          "task_id": 1,
+          "scenario": "data_analysis",
+          "query": "Compare transformer-based architectures vs GNN-based architectures for routing in agent networks. Provide quantitative analysis.",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 278.71,
+              "success": true,
+              "quality": 0.7803,
+              "tokens": 417
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 906.44,
+              "success": true,
+              "quality": 0.7303,
+              "tokens": 241
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 2149.49,
+              "success": true,
+              "quality": 0.8377,
+              "tokens": 251
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 962.3,
+              "success": true,
+              "quality": 0.7139,
+              "tokens": 572
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 2352.22,
+              "success": true,
+              "quality": 0.5745,
+              "tokens": 323
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 753.14,
+              "success": true,
+              "quality": 0.9698,
+              "tokens": 215
+            }
+          ],
+          "total_latency_ms": 7402.3,
+          "total_tokens": 2019,
+          "success": true
+        },
+        {
+          "task_id": 2,
+          "scenario": "quick_review",
+          "query": "Write a brief summary of how adaptive routing improves multi-agent collaboration efficiency.",
+          "path": [
+            "coordinator",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 387.18,
+              "success": true,
+              "quality": 0.7187,
+              "tokens": 623
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 1805.6,
+              "success": true,
+              "quality": 0.802,
+              "tokens": 165
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 1191.83,
+              "success": true,
+              "quality": 0.7851,
+              "tokens": 146
+            }
+          ],
+          "total_latency_ms": 3384.6,
+          "total_tokens": 934,
+          "success": true
+        },
+        {
+          "task_id": 3,
+          "scenario": "deep_investigation",
+          "query": "Investigate the trade-offs between centralized and decentralized routing in multi-agent systems. Consider both technical and business perspectives.",
+          "path": [
+            "coordinator",
+            "researcher",
+            "expert_1",
+            "expert_2",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 664.19,
+              "success": true,
+              "quality": 0.7535,
+              "tokens": 103
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 1721.02,
+              "success": true,
+              "quality": 0.6695,
+              "tokens": 158
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 1435.94,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "expert_2",
+              "latency_ms": 1858.63,
+              "success": true,
+              "quality": 0.759,
+              "tokens": 667
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 640.69,
+              "success": true,
+              "quality": 0.8294,
+              "tokens": 324
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 600.79,
+              "success": true,
+              "quality": 0.7863,
+              "tokens": 567
+            }
+          ],
+          "total_latency_ms": 6921.27,
+          "total_tokens": 1819,
+          "success": false
+        },
+        {
+          "task_id": 4,
+          "scenario": "expert_consult",
+          "query": "Evaluate the feasibility of using GNN-based routing for real-time decision making in production multi-agent systems.",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 795.61,
+              "success": true,
+              "quality": 0.9314,
+              "tokens": 546
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 571.02,
+              "success": true,
+              "quality": 0.8313,
+              "tokens": 779
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 900.45,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 782.16,
+              "success": true,
+              "quality": 0.8254,
+              "tokens": 301
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 966.72,
+              "success": true,
+              "quality": 0.7778,
+              "tokens": 788
+            }
+          ],
+          "total_latency_ms": 4015.96,
+          "total_tokens": 2414,
+          "success": false
+        },
+        {
+          "task_id": 5,
+          "scenario": "tech_proposal",
+          "query": "Propose an architecture for a self-optimizing multi-agent system that uses graph neural networks for dynamic task routing.",
+          "path": [
+            "coordinator",
+            "researcher",
+            "analyst",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 394.12,
+              "success": true,
+              "quality": 0.9122,
+              "tokens": 128
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 1845.89,
+              "success": true,
+              "quality": 0.6992,
+              "tokens": 464
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 578.47,
+              "success": true,
+              "quality": 0.9041,
+              "tokens": 486
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 2089.73,
+              "success": true,
+              "quality": 0.6521,
+              "tokens": 531
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 456.13,
+              "success": true,
+              "quality": 0.8407,
+              "tokens": 201
+            }
+          ],
+          "total_latency_ms": 5364.33,
+          "total_tokens": 1810,
+          "success": true
+        },
+        {
+          "task_id": 6,
+          "scenario": "comparative_study",
+          "query": "Compare ARGMAX, TOP_K, and SOFTMAX routing strategies for multi-agent systems. Which is best for latency-sensitive applications?",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 324.19,
+              "success": true,
+              "quality": 0.7692,
+              "tokens": 488
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 968.2,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 1688.42,
+              "success": true,
+              "quality": 0.9078,
+              "tokens": 151
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 699.93,
+              "success": true,
+              "quality": 0.7273,
+              "tokens": 266
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 971.96,
+              "success": true,
+              "quality": 0.7512,
+              "tokens": 181
+            }
+          ],
+          "total_latency_ms": 4652.7,
+          "total_tokens": 1086,
+          "success": false
+        },
+        {
+          "task_id": 7,
+          "scenario": "research_report",
+          "query": "Analyze the current state of Graph Neural Networks in multi-agent systems. What are the key advantages and limitations?",
+          "path": [
+            "coordinator",
+            "researcher",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 447.4,
+              "success": true,
+              "quality": 0.9349,
+              "tokens": 232
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 1267.55,
+              "success": true,
+              "quality": 0.8202,
+              "tokens": 216
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 1745.5,
+              "success": true,
+              "quality": 0.938,
+              "tokens": 728
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 527.57,
+              "success": true,
+              "quality": 0.8942,
+              "tokens": 759
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 660.42,
+              "success": true,
+              "quality": 0.7539,
+              "tokens": 212
+            }
+          ],
+          "total_latency_ms": 4648.43,
+          "total_tokens": 2147,
+          "success": true
+        },
+        {
+          "task_id": 8,
+          "scenario": "data_analysis",
+          "query": "Compare transformer-based architectures vs GNN-based architectures for routing in agent networks. Provide quantitative analysis.",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 387.82,
+              "success": true,
+              "quality": 0.9109,
+              "tokens": 306
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 421.13,
+              "success": true,
+              "quality": 0.8238,
+              "tokens": 568
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 2231.79,
+              "success": true,
+              "quality": 0.8474,
+              "tokens": 521
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 406.6,
+              "success": true,
+              "quality": 0.8766,
+              "tokens": 709
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 1696.89,
+              "success": true,
+              "quality": 0.5551,
+              "tokens": 173
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 562.59,
+              "success": true,
+              "quality": 0.8615,
+              "tokens": 389
+            }
+          ],
+          "total_latency_ms": 5706.82,
+          "total_tokens": 2666,
+          "success": true
+        },
+        {
+          "task_id": 9,
+          "scenario": "quick_review",
+          "query": "Write a brief summary of how adaptive routing improves multi-agent collaboration efficiency.",
+          "path": [
+            "coordinator",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 747.12,
+              "success": true,
+              "quality": 0.938,
+              "tokens": 579
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 1759.2,
+              "success": true,
+              "quality": 0.7371,
+              "tokens": 633
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 1089.87,
+              "success": true,
+              "quality": 0.753,
+              "tokens": 221
+            }
+          ],
+          "total_latency_ms": 3596.19,
+          "total_tokens": 1433,
+          "success": true
+        },
+        {
+          "task_id": 10,
+          "scenario": "deep_investigation",
+          "query": "Investigate the trade-offs between centralized and decentralized routing in multi-agent systems. Consider both technical and business perspectives.",
+          "path": [
+            "coordinator",
+            "researcher",
+            "expert_1",
+            "expert_2",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 470.48,
+              "success": true,
+              "quality": 0.7434,
+              "tokens": 301
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 783.61,
+              "success": true,
+              "quality": 0.6873,
+              "tokens": 738
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 2982.06,
+              "success": true,
+              "quality": 0.8732,
+              "tokens": 621
+            },
+            {
+              "agent": "expert_2",
+              "latency_ms": 1623.42,
+              "success": true,
+              "quality": 0.6925,
+              "tokens": 771
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 472.3,
+              "success": true,
+              "quality": 0.7853,
+              "tokens": 521
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 527.0,
+              "success": true,
+              "quality": 0.8973,
+              "tokens": 485
+            }
+          ],
+          "total_latency_ms": 6858.87,
+          "total_tokens": 3437,
+          "success": true
+        },
+        {
+          "task_id": 11,
+          "scenario": "expert_consult",
+          "query": "Evaluate the feasibility of using GNN-based routing for real-time decision making in production multi-agent systems.",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 431.34,
+              "success": true,
+              "quality": 0.9115,
+              "tokens": 494
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 905.03,
+              "success": true,
+              "quality": 0.7328,
+              "tokens": 706
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 2147.0,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 947.51,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 610.7,
+              "success": true,
+              "quality": 0.7889,
+              "tokens": 625
+            }
+          ],
+          "total_latency_ms": 5041.59,
+          "total_tokens": 1825,
+          "success": false
+        },
+        {
+          "task_id": 12,
+          "scenario": "tech_proposal",
+          "query": "Propose an architecture for a self-optimizing multi-agent system that uses graph neural networks for dynamic task routing.",
+          "path": [
+            "coordinator",
+            "researcher",
+            "analyst",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 252.1,
+              "success": true,
+              "quality": 0.715,
+              "tokens": 260
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 1630.54,
+              "success": true,
+              "quality": 0.8691,
+              "tokens": 581
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 742.74,
+              "success": true,
+              "quality": 0.9106,
+              "tokens": 152
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 1927.26,
+              "success": true,
+              "quality": 0.8648,
+              "tokens": 547
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 800.01,
+              "success": true,
+              "quality": 0.8284,
+              "tokens": 731
+            }
+          ],
+          "total_latency_ms": 5352.66,
+          "total_tokens": 2271,
+          "success": true
+        },
+        {
+          "task_id": 13,
+          "scenario": "comparative_study",
+          "query": "Compare ARGMAX, TOP_K, and SOFTMAX routing strategies for multi-agent systems. Which is best for latency-sensitive applications?",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 353.32,
+              "success": true,
+              "quality": 0.8006,
+              "tokens": 601
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 704.92,
+              "success": true,
+              "quality": 0.7161,
+              "tokens": 612
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 2080.7,
+              "success": true,
+              "quality": 0.8656,
+              "tokens": 188
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 559.03,
+              "success": true,
+              "quality": 0.7637,
+              "tokens": 430
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 446.29,
+              "success": true,
+              "quality": 0.9012,
+              "tokens": 266
+            }
+          ],
+          "total_latency_ms": 4144.26,
+          "total_tokens": 2097,
+          "success": true
+        },
+        {
+          "task_id": 14,
+          "scenario": "research_report",
+          "query": "Analyze the current state of Graph Neural Networks in multi-agent systems. What are the key advantages and limitations?",
+          "path": [
+            "coordinator",
+            "researcher",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 742.56,
+              "success": true,
+              "quality": 0.8852,
+              "tokens": 212
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 1687.82,
+              "success": true,
+              "quality": 0.6112,
+              "tokens": 759
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 1888.71,
+              "success": true,
+              "quality": 0.9363,
+              "tokens": 187
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 338.63,
+              "success": true,
+              "quality": 0.8945,
+              "tokens": 236
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 472.58,
+              "success": true,
+              "quality": 0.9056,
+              "tokens": 790
+            }
+          ],
+          "total_latency_ms": 5130.31,
+          "total_tokens": 2184,
+          "success": true
+        },
+        {
+          "task_id": 15,
+          "scenario": "data_analysis",
+          "query": "Compare transformer-based architectures vs GNN-based architectures for routing in agent networks. Provide quantitative analysis.",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 770.86,
+              "success": true,
+              "quality": 0.8045,
+              "tokens": 396
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 1156.26,
+              "success": true,
+              "quality": 0.7619,
+              "tokens": 440
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 1169.74,
+              "success": true,
+              "quality": 0.7866,
+              "tokens": 727
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 467.11,
+              "success": true,
+              "quality": 0.6649,
+              "tokens": 323
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 2424.94,
+              "success": true,
+              "quality": 0.6305,
+              "tokens": 301
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 1139.05,
+              "success": true,
+              "quality": 0.8781,
+              "tokens": 588
+            }
+          ],
+          "total_latency_ms": 7127.97,
+          "total_tokens": 2775,
+          "success": true
+        },
+        {
+          "task_id": 16,
+          "scenario": "quick_review",
+          "query": "Write a brief summary of how adaptive routing improves multi-agent collaboration efficiency.",
+          "path": [
+            "coordinator",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 330.3,
+              "success": true,
+              "quality": 0.9471,
+              "tokens": 211
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 2065.13,
+              "success": true,
+              "quality": 0.7777,
+              "tokens": 742
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 517.28,
+              "success": true,
+              "quality": 0.7415,
+              "tokens": 562
+            }
+          ],
+          "total_latency_ms": 2912.71,
+          "total_tokens": 1515,
+          "success": true
+        },
+        {
+          "task_id": 17,
+          "scenario": "deep_investigation",
+          "query": "Investigate the trade-offs between centralized and decentralized routing in multi-agent systems. Consider both technical and business perspectives.",
+          "path": [
+            "coordinator",
+            "researcher",
+            "expert_1",
+            "expert_2",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 682.28,
+              "success": true,
+              "quality": 0.9472,
+              "tokens": 188
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 738.82,
+              "success": true,
+              "quality": 0.8638,
+              "tokens": 787
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 2520.4,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "expert_2",
+              "latency_ms": 1726.98,
+              "success": true,
+              "quality": 0.682,
+              "tokens": 693
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 385.35,
+              "success": true,
+              "quality": 0.7419,
+              "tokens": 644
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 562.9,
+              "success": true,
+              "quality": 0.9601,
+              "tokens": 702
+            }
+          ],
+          "total_latency_ms": 6616.72,
+          "total_tokens": 3014,
+          "success": false
+        },
+        {
+          "task_id": 18,
+          "scenario": "expert_consult",
+          "query": "Evaluate the feasibility of using GNN-based routing for real-time decision making in production multi-agent systems.",
+          "path": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 537.92,
+              "success": true,
+              "quality": 0.921,
+              "tokens": 221
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 545.02,
+              "success": true,
+              "quality": 0.8863,
+              "tokens": 570
+            },
+            {
+              "agent": "expert_1",
+              "latency_ms": 1816.62,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "aggregator",
+              "latency_ms": 563.89,
+              "success": false,
+              "quality": 0.0,
+              "tokens": 0
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 1019.77,
+              "success": true,
+              "quality": 0.8323,
+              "tokens": 498
+            }
+          ],
+          "total_latency_ms": 4483.22,
+          "total_tokens": 1289,
+          "success": false
+        },
+        {
+          "task_id": 19,
+          "scenario": "tech_proposal",
+          "query": "Propose an architecture for a self-optimizing multi-agent system that uses graph neural networks for dynamic task routing.",
+          "path": [
+            "coordinator",
+            "researcher",
+            "analyst",
+            "writer",
+            "reviewer"
+          ],
+          "steps": [
+            {
+              "agent": "coordinator",
+              "latency_ms": 634.37,
+              "success": true,
+              "quality": 0.7775,
+              "tokens": 562
+            },
+            {
+              "agent": "researcher",
+              "latency_ms": 1292.59,
+              "success": true,
+              "quality": 0.6662,
+              "tokens": 426
+            },
+            {
+              "agent": "analyst",
+              "latency_ms": 1324.88,
+              "success": true,
+              "quality": 0.7871,
+              "tokens": 617
+            },
+            {
+              "agent": "writer",
+              "latency_ms": 1656.35,
+              "success": true,
+              "quality": 0.7478,
+              "tokens": 627
+            },
+            {
+              "agent": "reviewer",
+              "latency_ms": 573.54,
+              "success": true,
+              "quality": 0.8529,
+              "tokens": 759
+            }
+          ],
+          "total_latency_ms": 5481.72,
+          "total_tokens": 2991,
+          "success": true
+        }
+      ]
+    },
+    "graph_analysis": {
+      "k_shortest_paths": [
+        {
+          "nodes": [
+            "coordinator",
+            "writer",
+            "reviewer"
+          ],
+          "weight": 1.55,
+          "edge_weights": [
+            0.6,
+            0.95
+          ]
+        },
+        {
+          "nodes": [
+            "coordinator",
+            "analyst",
+            "writer",
+            "reviewer"
+          ],
+          "weight": 2.68,
+          "edge_weights": [
+            0.85,
+            0.88,
+            0.95
+          ]
+        },
+        {
+          "nodes": [
+            "coordinator",
+            "researcher",
+            "expert_2",
+            "aggregator",
+            "reviewer"
+          ],
+          "weight": 3.15,
+          "edge_weights": [
+            0.9,
+            0.65,
+            0.7,
+            0.9
+          ]
+        },
+        {
+          "nodes": [
+            "coordinator",
+            "researcher",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "weight": 3.37,
+          "edge_weights": [
+            0.9,
+            0.75,
+            0.82,
+            0.9
+          ]
+        },
+        {
+          "nodes": [
+            "coordinator",
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer"
+          ],
+          "weight": 3.37,
+          "edge_weights": [
+            0.85,
+            0.8,
+            0.82,
+            0.9
+          ]
+        }
+      ],
+      "centralities": {
+        "pagerank": {
+          "values": {
+            "__task__": 0.016667,
+            "coordinator": 0.206505,
+            "researcher": 0.075176,
+            "analyst": 0.096476,
+            "writer": 0.165504,
+            "reviewer": 0.206672,
+            "expert_1": 0.07897,
+            "expert_2": 0.037967,
+            "aggregator": 0.116063
+          },
+          "top_3": [
+            [
+              "reviewer",
+              0.206672
+            ],
+            [
+              "coordinator",
+              0.206505
+            ],
+            [
+              "writer",
+              0.165504
+            ]
+          ]
+        },
+        "betweenness": {
+          "values": {
+            "__task__": 0.0,
+            "coordinator": 0.535714,
+            "researcher": 0.22619,
+            "analyst": 0.107143,
+            "writer": 0.119048,
+            "reviewer": 0.410714,
+            "expert_1": 0.08631,
+            "expert_2": 0.044643,
+            "aggregator": 0.238095
+          },
+          "top_3": [
+            [
+              "coordinator",
+              0.535714
+            ],
+            [
+              "reviewer",
+              0.410714
+            ],
+            [
+              "aggregator",
+              0.238095
+            ]
+          ]
+        },
+        "degree": {
+          "values": {
+            "__task__": 0.0625,
+            "coordinator": 0.3125,
+            "researcher": 0.25,
+            "analyst": 0.25,
+            "writer": 0.25,
+            "reviewer": 0.1875,
+            "expert_1": 0.1875,
+            "expert_2": 0.125,
+            "aggregator": 0.25
+          },
+          "top_3": [
+            [
+              "coordinator",
+              0.3125
+            ],
+            [
+              "researcher",
+              0.25
+            ],
+            [
+              "analyst",
+              0.25
+            ]
+          ]
+        }
+      },
+      "communities": {
+        "count": 1,
+        "sizes": [
+          9
+        ],
+        "members": [
+          [
+            "analyst",
+            "writer",
+            "reviewer",
+            "expert_1",
+            "expert_2",
+            "coordinator",
+            "__task__",
+            "aggregator",
+            "researcher"
+          ]
+        ]
+      },
+      "cycles": [
+        {
+          "nodes": [
+            "expert_2",
+            "aggregator",
+            "reviewer",
+            "coordinator",
+            "researcher"
+          ],
+          "weight": 3.65
+        },
+        {
+          "nodes": [
+            "expert_2",
+            "aggregator",
+            "writer",
+            "reviewer",
+            "coordinator",
+            "researcher"
+          ],
+          "weight": 4.45
+        },
+        {
+          "nodes": [
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer",
+            "coordinator",
+            "researcher"
+          ],
+          "weight": 4.62
+        },
+        {
+          "nodes": [
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "reviewer",
+            "coordinator"
+          ],
+          "weight": 3.87
+        },
+        {
+          "nodes": [
+            "analyst",
+            "expert_1",
+            "aggregator",
+            "writer",
+            "reviewer",
+            "coordinator"
+          ],
+          "weight": 4.67
+        }
+      ]
+    },
+    "training_data": {
+      "train_size": 240,
+      "val_size": 60,
+      "feature_dim": 8,
+      "data_source": "simulated execution metrics"
+    },
+    "training": {
+      "GCN": {
+        "model_type": "gcn",
+        "train_losses": [
+          0.457239,
+          0.196474,
+          0.086478,
+          0.042899,
+          0.024165,
+          0.016227,
+          0.011121,
+          0.008723,
+          0.006856,
+          0.005632,
+          0.00479,
+          0.00409,
+          0.003291,
+          0.003089,
+          0.002565,
+          0.002271,
+          0.001985,
+          0.001774,
+          0.001604,
+          0.001462,
+          0.001452,
+          0.001279,
+          0.00123,
+          0.001038,
+          0.001006,
+          0.000923,
+          0.000882,
+          0.000729,
+          0.000771,
+          0.000695,
+          0.000675,
+          0.000643,
+          0.000643,
+          0.000582,
+          0.000533,
+          0.000514,
+          0.000449,
+          0.000478,
+          0.000449,
+          0.000462,
+          0.000449,
+          0.000427,
+          0.000394,
+          0.000311,
+          0.000369,
+          0.000294,
+          0.000293,
+          0.000329,
+          0.000328,
+          0.000299,
+          0.000326,
+          0.000277,
+          0.000259,
+          0.000244,
+          0.000224,
+          0.000241,
+          0.000229,
+          0.000255,
+          0.00021,
+          0.000222,
+          0.000205,
+          0.000218,
+          0.000206,
+          0.000192,
+          0.00019,
+          0.000207,
+          0.000186,
+          0.000165,
+          0.000166,
+          0.000161,
+          0.000154,
+          0.000158,
+          0.000141,
+          0.000135,
+          0.000126,
+          0.000132,
+          0.000129,
+          0.000115,
+          0.000118,
+          0.000124
+        ],
+        "val_losses": [
+          0.463675,
+          0.194515,
+          0.061961,
+          0.02402,
+          0.012771,
+          0.008403,
+          0.005999,
+          0.004522,
+          0.003566,
+          0.0028,
+          0.002242,
+          0.001853,
+          0.001582,
+          0.001345,
+          0.00113,
+          0.001009,
+          0.00087,
+          0.000783,
+          0.000693,
+          0.000621,
+          0.000563,
+          0.000515,
+          0.000469,
+          0.000429,
+          0.000391,
+          0.000361,
+          0.000332,
+          0.000308,
+          0.000293,
+          0.000279,
+          0.000254,
+          0.000237,
+          0.000226,
+          0.000211,
+          0.000197,
+          0.000186,
+          0.000181,
+          0.000172,
+          0.000161,
+          0.000152,
+          0.000143,
+          0.000138,
+          0.000132,
+          0.000125,
+          0.000122,
+          0.000114,
+          0.000108,
+          0.000105,
+          0.0001,
+          9.5e-05,
+          9.2e-05,
+          8.8e-05,
+          8.4e-05,
+          8e-05,
+          7.8e-05,
+          7.5e-05,
+          7.2e-05,
+          7e-05,
+          6.9e-05,
+          6.6e-05,
+          6.4e-05,
+          6.1e-05,
+          5.9e-05,
+          5.7e-05,
+          5.5e-05,
+          5.5e-05,
+          5.4e-05,
+          4.9e-05,
+          4.8e-05,
+          4.8e-05,
+          4.6e-05,
+          4.3e-05,
+          4.2e-05,
+          4.1e-05,
+          4e-05,
+          3.9e-05,
+          3.9e-05,
+          3.8e-05,
+          3.7e-05,
+          3.5e-05
+        ],
+        "best_epoch": 79,
+        "best_val_loss": 3.5e-05,
+        "total_epochs": 80,
+        "training_time_sec": 6.91,
+        "num_params": 9282
+      },
+      "gat": {
+        "model_type": "gat",
+        "train_losses": [
+          0.580785,
+          0.275597,
+          0.157191,
+          0.097376,
+          0.064859,
+          0.045319,
+          0.03451,
+          0.027156,
+          0.0206,
+          0.016768,
+          0.014848,
+          0.012374,
+          0.010346,
+          0.009475,
+          0.008814,
+          0.007392,
+          0.006442,
+          0.005674,
+          0.005433,
+          0.005109,
+          0.004253,
+          0.004027,
+          0.003558,
+          0.003657,
+          0.00322,
+          0.003244,
+          0.002676,
+          0.00306,
+          0.00237,
+          0.002229,
+          0.002041,
+          0.002131,
+          0.002016,
+          0.001515,
+          0.001561,
+          0.001386,
+          0.001459,
+          0.001815,
+          0.001591,
+          0.001525,
+          0.001144,
+          0.001297,
+          0.001452,
+          0.001222,
+          0.001219,
+          0.00116,
+          0.00085,
+          0.001313,
+          0.000996,
+          0.001012,
+          0.000753,
+          0.000839,
+          0.000747,
+          0.000966,
+          0.000918,
+          0.00067,
+          0.000671,
+          0.000634,
+          0.000801,
+          0.000587,
+          0.000562,
+          0.000594,
+          0.000559,
+          0.000859,
+          0.000678,
+          0.001131,
+          0.00073,
+          0.000615,
+          0.000574,
+          0.00044,
+          0.000457,
+          0.000451,
+          0.000576,
+          0.0005,
+          0.000428,
+          0.00038,
+          0.00038,
+          0.000361,
+          0.000388,
+          0.000388
+        ],
+        "val_losses": [
+          0.435334,
+          0.206146,
+          0.089922,
+          0.043091,
+          0.023998,
+          0.01511,
+          0.009705,
+          0.007263,
+          0.005413,
+          0.004116,
+          0.003384,
+          0.002741,
+          0.002249,
+          0.001819,
+          0.001524,
+          0.001256,
+          0.00107,
+          0.000967,
+          0.000811,
+          0.000736,
+          0.000651,
+          0.000596,
+          0.000507,
+          0.000452,
+          0.000438,
+          0.0004,
+          0.000368,
+          0.000333,
+          0.000309,
+          0.000273,
+          0.000242,
+          0.000223,
+          0.000212,
+          0.000207,
+          0.00019,
+          0.000174,
+          0.000158,
+          0.000158,
+          0.000143,
+          0.000133,
+          0.000128,
+          0.000127,
+          0.000118,
+          0.000115,
+          0.000107,
+          9.5e-05,
+          9.4e-05,
+          9.8e-05,
+          9e-05,
+          8.2e-05,
+          7.8e-05,
+          7.3e-05,
+          6.6e-05,
+          6.4e-05,
+          6.6e-05,
+          6.4e-05,
+          5.6e-05,
+          5.2e-05,
+          5e-05,
+          4.9e-05,
+          4.6e-05,
+          4.7e-05,
+          4.5e-05,
+          4.3e-05,
+          4e-05,
+          3.7e-05,
+          3.8e-05,
+          4e-05,
+          3.7e-05,
+          3.6e-05,
+          3.3e-05,
+          3.2e-05,
+          3e-05,
+          3e-05,
+          2.9e-05,
+          2.6e-05,
+          2.7e-05,
+          2.7e-05,
+          2.5e-05,
+          2.4e-05
+        ],
+        "best_epoch": 79,
+        "best_val_loss": 2.4e-05,
+        "total_epochs": 80,
+        "training_time_sec": 8.83,
+        "num_params": 9538
+      },
+      "sage": {
+        "model_type": "sage",
+        "train_losses": [
+          0.232933,
+          0.023535,
+          0.007249,
+          0.004252,
+          0.003079,
+          0.002304,
+          0.001978,
+          0.001631,
+          0.00135,
+          0.001193,
+          0.001016,
+          0.000903,
+          0.000778,
+          0.000713,
+          0.000654,
+          0.000571,
+          0.000526,
+          0.000485,
+          0.000425,
+          0.000408,
+          0.000404,
+          0.000357,
+          0.000333,
+          0.000315,
+          0.000305,
+          0.000269,
+          0.000259,
+          0.000244,
+          0.000246,
+          0.000231,
+          0.000212,
+          0.000202,
+          0.000203,
+          0.000179,
+          0.000174,
+          0.000167,
+          0.000152,
+          0.000142,
+          0.000142,
+          0.000135,
+          0.000133,
+          0.000135,
+          0.000123,
+          0.000127,
+          0.000106,
+          0.000104,
+          0.00011,
+          0.000113,
+          0.000101,
+          9e-05,
+          9.1e-05,
+          9.1e-05,
+          8.1e-05,
+          7.5e-05,
+          8e-05,
+          7.7e-05,
+          7.1e-05,
+          6.8e-05,
+          7.7e-05,
+          6.3e-05,
+          6.7e-05,
+          7.1e-05,
+          6e-05,
+          6.6e-05,
+          6.1e-05,
+          5.7e-05,
+          6.1e-05,
+          5.5e-05,
+          6e-05,
+          5.2e-05,
+          5.8e-05,
+          5.2e-05,
+          5.5e-05,
+          4.6e-05,
+          4.8e-05,
+          4.5e-05,
+          4.7e-05,
+          3.9e-05,
+          4.6e-05,
+          3.9e-05
+        ],
+        "val_losses": [
+          0.192016,
+          0.026035,
+          0.005542,
+          0.002614,
+          0.001815,
+          0.001415,
+          0.001128,
+          0.000919,
+          0.000793,
+          0.000668,
+          0.000583,
+          0.000514,
+          0.000452,
+          0.000403,
+          0.000367,
+          0.000331,
+          0.000298,
+          0.000275,
+          0.000253,
+          0.000229,
+          0.000213,
+          0.000198,
+          0.000181,
+          0.000172,
+          0.000159,
+          0.00015,
+          0.000141,
+          0.00013,
+          0.000122,
+          0.000116,
+          0.000109,
+          0.000104,
+          9.7e-05,
+          9.3e-05,
+          8.9e-05,
+          8.3e-05,
+          8e-05,
+          7.6e-05,
+          7.2e-05,
+          7e-05,
+          6.7e-05,
+          6.3e-05,
+          6.1e-05,
+          5.8e-05,
+          5.6e-05,
+          5.4e-05,
+          5.1e-05,
+          5e-05,
+          4.8e-05,
+          4.7e-05,
+          4.5e-05,
+          4.3e-05,
+          4.2e-05,
+          4.1e-05,
+          3.9e-05,
+          3.8e-05,
+          3.7e-05,
+          3.5e-05,
+          3.4e-05,
+          3.3e-05,
+          3.1e-05,
+          3.2e-05,
+          3e-05,
+          2.9e-05,
+          2.9e-05,
+          2.8e-05,
+          2.7e-05,
+          2.6e-05,
+          2.6e-05,
+          2.5e-05,
+          2.4e-05,
+          2.4e-05,
+          2.3e-05,
+          2.3e-05,
+          2.2e-05,
+          2.1e-05,
+          2.1e-05,
+          2e-05,
+          1.9e-05,
+          1.9e-05
+        ],
+        "best_epoch": 79,
+        "best_val_loss": 1.9e-05,
+        "total_epochs": 80,
+        "training_time_sec": 6.07,
+        "num_params": 17474
+      }
+    },
+    "routing_comparison": {
+      "GNN_ARGMAX": {
+        "avg_confidence": 0.79,
+        "avg_chosen_quality": 0.6701,
+        "num_trials": 200,
+        "sample_results": [
+          {
+            "source": "researcher",
+            "recommended": [
+              "analyst"
+            ],
+            "confidence": 0.9999,
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer"
+            ],
+            "confidence": 1.0,
+            "avg_chosen_score": 0.7206
+          },
+          {
+            "source": "researcher",
+            "recommended": [
+              "analyst"
+            ],
+            "confidence": 0.9999,
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "analyst",
+            "recommended": [
+              "writer"
+            ],
+            "confidence": 0.0001,
+            "avg_chosen_score": 0.6511
+          },
+          {
+            "source": "analyst",
+            "recommended": [
+              "writer"
+            ],
+            "confidence": 0.0001,
+            "avg_chosen_score": 0.6511
+          }
+        ]
+      },
+      "GNN_TOP_K": {
+        "avg_confidence": 0.3675,
+        "avg_chosen_quality": 0.6182,
+        "num_trials": 200,
+        "sample_results": [
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer",
+              "writer"
+            ],
+            "confidence": 0.5,
+            "avg_chosen_score": 0.6858
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "researcher",
+              "analyst",
+              "writer"
+            ],
+            "confidence": 0.6667,
+            "avg_chosen_score": 0.6536
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "researcher",
+              "analyst",
+              "writer"
+            ],
+            "confidence": 0.6667,
+            "avg_chosen_score": 0.6536
+          },
+          {
+            "source": "analyst",
+            "recommended": [
+              "writer",
+              "expert_1"
+            ],
+            "confidence": 0.0001,
+            "avg_chosen_score": 0.5657
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "researcher",
+              "analyst",
+              "writer"
+            ],
+            "confidence": 0.6667,
+            "avg_chosen_score": 0.6536
+          }
+        ]
+      },
+      "GNN_THRESHOLD": {
+        "avg_confidence": 0.7799,
+        "avg_chosen_quality": 0.5279,
+        "num_trials": 200,
+        "sample_results": [
+          {
+            "source": "researcher",
+            "recommended": [
+              "analyst"
+            ],
+            "confidence": 0.9999,
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer"
+            ],
+            "confidence": 1.0,
+            "avg_chosen_score": 0.7206
+          },
+          {
+            "source": "analyst",
+            "recommended": [],
+            "confidence": 0.0,
+            "avg_chosen_score": 0.0
+          },
+          {
+            "source": "researcher",
+            "recommended": [
+              "analyst"
+            ],
+            "confidence": 0.9999,
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "researcher",
+              "analyst"
+            ],
+            "confidence": 0.9999,
+            "avg_chosen_score": 0.6548
+          }
+        ]
+      },
+      "GNN_SOFTMAX": {
+        "avg_confidence": 0.79,
+        "avg_chosen_quality": 0.6578,
+        "num_trials": 200,
+        "sample_results": [
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer"
+            ],
+            "confidence": 1.0,
+            "avg_chosen_score": 0.7206
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "analyst"
+            ],
+            "confidence": 0.9999,
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "analyst",
+            "recommended": [
+              "expert_1"
+            ],
+            "confidence": 0.0,
+            "avg_chosen_score": 0.4803
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "researcher"
+            ],
+            "confidence": 1.0,
+            "avg_chosen_score": 0.6534
+          },
+          {
+            "source": "analyst",
+            "recommended": [
+              "expert_1"
+            ],
+            "confidence": 0.0,
+            "avg_chosen_score": 0.4803
+          }
+        ]
+      },
+      "RANDOM": {
+        "avg_confidence": 0.0,
+        "avg_chosen_quality": 0.6261,
+        "num_trials": 200,
+        "sample_results": [
+          {
+            "source": "analyst",
+            "recommended": [
+              "writer"
+            ],
+            "avg_chosen_score": 0.6511
+          },
+          {
+            "source": "analyst",
+            "recommended": [
+              "writer"
+            ],
+            "avg_chosen_score": 0.6511
+          },
+          {
+            "source": "researcher",
+            "recommended": [
+              "expert_2"
+            ],
+            "avg_chosen_score": 0.6002
+          },
+          {
+            "source": "researcher",
+            "recommended": [
+              "analyst"
+            ],
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "researcher"
+            ],
+            "avg_chosen_score": 0.6534
+          }
+        ]
+      },
+      "TOPOLOGICAL": {
+        "avg_confidence": 0.0,
+        "avg_chosen_quality": 0.6401,
+        "num_trials": 200,
+        "sample_results": [
+          {
+            "source": "researcher",
+            "recommended": [
+              "expert_1"
+            ],
+            "avg_chosen_score": 0.4803
+          },
+          {
+            "source": "researcher",
+            "recommended": [
+              "expert_1"
+            ],
+            "avg_chosen_score": 0.4803
+          },
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer"
+            ],
+            "avg_chosen_score": 0.7206
+          },
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer"
+            ],
+            "avg_chosen_score": 0.7206
+          },
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer"
+            ],
+            "avg_chosen_score": 0.7206
+          }
+        ]
+      },
+      "METRICS_BEST": {
+        "avg_confidence": 0.0,
+        "avg_chosen_quality": 0.6726,
+        "num_trials": 200,
+        "sample_results": [
+          {
+            "source": "aggregator",
+            "recommended": [
+              "reviewer"
+            ],
+            "avg_chosen_score": 0.7206
+          },
+          {
+            "source": "coordinator",
+            "recommended": [
+              "analyst"
+            ],
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "analyst",
+            "recommended": [
+              "writer"
+            ],
+            "avg_chosen_score": 0.6511
+          },
+          {
+            "source": "researcher",
+            "recommended": [
+              "analyst"
+            ],
+            "avg_chosen_score": 0.6562
+          },
+          {
+            "source": "researcher",
+            "recommended": [
+              "analyst"
+            ],
+            "avg_chosen_score": 0.6562
+          }
+        ]
+      }
+    },
+    "edge_weights_after": {
+      "static": {
+        "__task__->coordinator": {
+          "weight": 1.0
+        },
+        "coordinator->researcher": {
+          "weight": 0.9
+        },
+        "coordinator->writer": {
+          "weight": 0.6
+        },
+        "coordinator->analyst": {
+          "weight": 0.85
+        },
+        "researcher->expert_2": {
+          "weight": 0.65
+        },
+        "researcher->expert_1": {
+          "weight": 0.75
+        },
+        "researcher->analyst": {
+          "weight": 0.7
+        },
+        "analyst->expert_1": {
+          "weight": 0.8
+        },
+        "analyst->writer": {
+          "weight": 0.88
+        },
+        "expert_1->aggregator": {
+          "weight": 0.82
+        },
+        "expert_2->aggregator": {
+          "weight": 0.7
+        },
+        "writer->reviewer": {
+          "weight": 0.95
+        },
+        "aggregator->reviewer": {
+          "weight": 0.9
+        },
+        "aggregator->writer": {
+          "weight": 0.75
+        },
+        "reviewer->coordinator": {
+          "weight": 0.5
+        }
+      },
+      "dynamic": {
+        "coordinator->researcher": {
+          "effective_weight": 4.3203,
+          "reliability": 1.0,
+          "avg_latency_ms": 1373.43,
+          "total_transitions": 9
+        },
+        "researcher->expert_1": {
+          "effective_weight": 6.9182,
+          "reliability": 0.5,
+          "avg_latency_ms": 2156.07,
+          "total_transitions": 6
+        },
+        "expert_1->aggregator": {
+          "effective_weight": 2.1692,
+          "reliability": 0.8182,
+          "avg_latency_ms": 626.1,
+          "total_transitions": 11
+        },
+        "aggregator->reviewer": {
+          "effective_weight": 2.3406,
+          "reliability": 1.0,
+          "avg_latency_ms": 713.52,
+          "total_transitions": 11
+        },
+        "coordinator->analyst": {
+          "effective_weight": 2.5793,
+          "reliability": 0.875,
+          "avg_latency_ms": 772.25,
+          "total_transitions": 8
+        },
+        "analyst->expert_1": {
+          "effective_weight": 5.7066,
+          "reliability": 0.625,
+          "avg_latency_ms": 1773.03,
+          "total_transitions": 8
+        },
+        "aggregator->writer": {
+          "effective_weight": 6.674,
+          "reliability": 1.0,
+          "avg_latency_ms": 2158.02,
+          "total_transitions": 3
+        },
+        "writer->reviewer": {
+          "effective_weight": 2.5611,
+          "reliability": 1.0,
+          "avg_latency_ms": 787.05,
+          "total_transitions": 9
+        },
+        "coordinator->writer": {
+          "effective_weight": 5.8299,
+          "reliability": 1.0,
+          "avg_latency_ms": 1876.64,
+          "total_transitions": 3
+        },
+        "expert_1->expert_2": {
+          "effective_weight": 5.409,
+          "reliability": 1.0,
+          "avg_latency_ms": 1736.34,
+          "total_transitions": 3
+        },
+        "expert_2->aggregator": {
+          "effective_weight": 1.6983,
+          "reliability": 1.0,
+          "avg_latency_ms": 499.45,
+          "total_transitions": 3
+        },
+        "researcher->analyst": {
+          "effective_weight": 2.8461,
+          "reliability": 1.0,
+          "avg_latency_ms": 882.03,
+          "total_transitions": 3
+        },
+        "analyst->writer": {
+          "effective_weight": 5.8733,
+          "reliability": 1.0,
+          "avg_latency_ms": 1891.11,
+          "total_transitions": 3
+        }
+      }
+    },
+    "gnn_scores": {
+      "__task__": 0.0,
+      "coordinator": 1.0,
+      "researcher": 1.0,
+      "analyst": 0.9999,
+      "writer": 0.0001,
+      "reviewer": 1.0,
+      "expert_1": 0.0,
+      "expert_2": 0.0,
+      "aggregator": 1.0
+    }
+  },
+  "graph": {
+    "nodes": [
+      "__task__",
+      "coordinator",
+      "researcher",
+      "analyst",
+      "writer",
+      "reviewer",
+      "expert_1",
+      "expert_2",
+      "aggregator"
+    ],
+    "num_edges": 15,
+    "edges": [
+      {
+        "source": "__task__",
+        "target": "coordinator",
+        "type": "task_context",
+        "weight": 1.0,
+        "probability": 1.0,
+        "attr": [
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "__task__",
+          "target": "coordinator",
+          "type": "task_context",
+          "weight": 1.0,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0"
+        }
+      },
+      {
+        "source": "coordinator",
+        "target": "researcher",
+        "type": "workflow",
+        "weight": 0.9,
+        "probability": 1.0,
+        "attr": [
+          0.8999999761581421,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "coordinator",
+          "target": "researcher",
+          "type": "workflow",
+          "weight": 0.9,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "coordinator",
+        "target": "analyst",
+        "type": "workflow",
+        "weight": 0.85,
+        "probability": 1.0,
+        "attr": [
+          0.8500000238418579,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "coordinator",
+          "target": "analyst",
+          "type": "workflow",
+          "weight": 0.85,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "coordinator",
+        "target": "writer",
+        "type": "workflow",
+        "weight": 0.6,
+        "probability": 1.0,
+        "attr": [
+          0.6000000238418579,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "coordinator",
+          "target": "writer",
+          "type": "workflow",
+          "weight": 0.6,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "researcher",
+        "target": "expert_1",
+        "type": "workflow",
+        "weight": 0.75,
+        "probability": 1.0,
+        "attr": [
+          0.75,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "researcher",
+          "target": "expert_1",
+          "type": "workflow",
+          "weight": 0.75,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "researcher",
+        "target": "expert_2",
+        "type": "workflow",
+        "weight": 0.65,
+        "probability": 1.0,
+        "attr": [
+          0.6499999761581421,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "researcher",
+          "target": "expert_2",
+          "type": "workflow",
+          "weight": 0.65,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "researcher",
+        "target": "analyst",
+        "type": "workflow",
+        "weight": 0.7,
+        "probability": 1.0,
+        "attr": [
+          0.699999988079071,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "researcher",
+          "target": "analyst",
+          "type": "workflow",
+          "weight": 0.7,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "analyst",
+        "target": "expert_1",
+        "type": "workflow",
+        "weight": 0.8,
+        "probability": 1.0,
+        "attr": [
+          0.800000011920929,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "analyst",
+          "target": "expert_1",
+          "type": "workflow",
+          "weight": 0.8,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "analyst",
+        "target": "writer",
+        "type": "workflow",
+        "weight": 0.88,
+        "probability": 1.0,
+        "attr": [
+          0.8799999952316284,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "analyst",
+          "target": "writer",
+          "type": "workflow",
+          "weight": 0.88,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "expert_1",
+        "target": "aggregator",
+        "type": "workflow",
+        "weight": 0.82,
+        "probability": 1.0,
+        "attr": [
+          0.8199999928474426,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "expert_1",
+          "target": "aggregator",
+          "type": "workflow",
+          "weight": 0.82,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "expert_2",
+        "target": "aggregator",
+        "type": "workflow",
+        "weight": 0.7,
+        "probability": 1.0,
+        "attr": [
+          0.699999988079071,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "expert_2",
+          "target": "aggregator",
+          "type": "workflow",
+          "weight": 0.7,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "writer",
+        "target": "reviewer",
+        "type": "workflow",
+        "weight": 0.95,
+        "probability": 1.0,
+        "attr": [
+          0.949999988079071,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "writer",
+          "target": "reviewer",
+          "type": "workflow",
+          "weight": 0.95,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "aggregator",
+        "target": "reviewer",
+        "type": "workflow",
+        "weight": 0.9,
+        "probability": 1.0,
+        "attr": [
+          0.8999999761581421,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "aggregator",
+          "target": "reviewer",
+          "type": "workflow",
+          "weight": 0.9,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "aggregator",
+        "target": "writer",
+        "type": "workflow",
+        "weight": 0.75,
+        "probability": 1.0,
+        "attr": [
+          0.75,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "aggregator",
+          "target": "writer",
+          "type": "workflow",
+          "weight": 0.75,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      },
+      {
+        "source": "reviewer",
+        "target": "coordinator",
+        "type": "workflow",
+        "weight": 0.5,
+        "probability": 1.0,
+        "attr": [
+          0.5,
+          1.0,
+          1.0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "schema": {
+          "source": "reviewer",
+          "target": "coordinator",
+          "type": "workflow",
+          "weight": 0.5,
+          "probability": 1.0,
+          "bidirectional": false,
+          "cost": {
+            "estimated_tokens": null,
+            "actual_tokens": null,
+            "latency_ms": null,
+            "timeout_ms": null,
+            "trust": 1.0,
+            "reliability": 1.0,
+            "cost_usd": null,
+            "custom": {}
+          },
+          "embedding": null,
+          "attr_dim": null,
+          "created_at": "2026-02-21 19:41:27.621964",
+          "metadata": {},
+          "schema_version": "2.0.0",
+          "condition": null,
+          "priority": 0,
+          "transform": null,
+          "is_conditional": false
+        }
+      }
+    ]
+  }
+}
